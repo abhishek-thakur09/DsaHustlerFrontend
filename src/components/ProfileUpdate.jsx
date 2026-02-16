@@ -1,44 +1,58 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import api from "../utils/api";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const ProfileUpload = () => {
+  const { user, updateUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState("");
+  if (!user) return <h1 className="text-white">Please login</h1>;
 
-  const handleChange = (e) => {
-    const img = e.target.files[0];
+  const handleChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    setFile(img);
-    setPreview(URL.createObjectURL(img));
-  };
+    try {
+      const formData = new FormData();
+      formData.append("profileImage", file);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+      const res = await api.post("/auth/upload", formData, {
+        withCredentials: true,
+      });
 
-    const formData = new FormData();
-    formData.append("profileImage", file);
+      // ⭐ update global user state
+      updateUser(res.data.user);
 
-    const res = await api.post("/auth/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-       withCredentials: true,
-    });
+      // ⭐ redirect to profile page
+      // navigate("/profile");
 
-    alert("Uploaded: " + res.data.url);
+      // // optional hard refresh
+      window.location.reload();
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="relative w-40 h-40 mx-auto">
 
-      <input type="file" onChange={handleChange} />
+      <img
+        src={user.profileImage || "/default-avatar.png"}
+        alt="profile"
+        className="w-full h-full rounded-full object-cover cursor-pointer border-4 border-green-500"
+        onClick={() => document.getElementById("profileUpload").click()}
+      />
 
-      {preview && <img src={preview} width="150" />}
+      <input
+        type="file"
+        id="profileUpload"
+        className="hidden"
+        onChange={handleChange}
+      />
 
-      <button>Upload</button>
-
-    </form>
+    </div>
   );
 };
 

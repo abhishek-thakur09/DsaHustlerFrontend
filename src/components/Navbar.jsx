@@ -79,14 +79,14 @@ const Navbar = () => {
                 onClick={() => navigate("/login")}
                 className="text-white hover:text-gray-300"
               >
-                Sign In
+                Log In
               </button>
 
               <button
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/signin")}
                 className="px-4 py-2 rounded-lg bg-blue-400 text-black font-medium hover:bg-blue-300 transition"
               >
-                Get Started
+                Register
               </button>
             </>
           )}
@@ -130,6 +130,7 @@ const Navbar = () => {
                 onClick={() => {
                   logout();
                   setIsOpen(false);
+                  navigate("/");
                 }}
                 className="block text-white px-4 py-2 rounded-lg bg-red-500"
               >
@@ -144,14 +145,14 @@ const Navbar = () => {
                 onClick={() => navigate("/login")}
                 className="block text-white"
               >
-                Sign In
+                Log In
               </button>
 
               <button
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/signin")}
                 className="block px-4 py-2 rounded-lg bg-blue-400 text-black"
               >
-                Get Started
+                Register
               </button>
             </>
           )}

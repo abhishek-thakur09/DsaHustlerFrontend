@@ -1,1 +1,0 @@
-export const Api_Secret = "CLOUDINARY_URL=cloudinary://592459221931693:**********@dgzhlacsi";
