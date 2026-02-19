@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import api from "../utils/api";
 import {useNavigate} from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {setTotalProblems} from "../Slice/ProblemSlice";
 
 const Problems = () => {
   const [problems, setProblems] = useState([]);
+  const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 10;
@@ -20,6 +23,7 @@ const Problems = () => {
       console.log(res);
       setProblems(res.data.problems);
       setTotalPages(res.data.totalPages);
+      dispatch(setTotalProblems(res.data.totalPages));
     };
 
     fetchData();

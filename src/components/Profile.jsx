@@ -1,15 +1,17 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { ProblemsContext } from "../context/ProblemContext";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import ProfileUpload from "./ProfileUpdate";
 
 const Profile = () => {
-  const { user, loading} = useContext(AuthContext);
-  const { total } = useContext(ProblemsContext);
+  const user = useSelector((state) => state.auth.user);
+  const loading = useSelector((state) => state.auth.loading);
+  const total = useSelector((state) => state.problems.total);
   const navigate = useNavigate();
 
+
+
   console.log(user);
-  
 
   if (loading) return <h1 className="text-white">Loading...</h1>;
 
@@ -22,11 +24,8 @@ const Profile = () => {
           {/* LEFT SECTION */}
           <div className="bg-[#0f172a] p-6 rounded-xl">
             {/*Profile image */}
-            <img
-              src={user.profileImage || "/default-avatar.png"}
-              alt="profile"
-              className="w-40 h-40 rounded-full object-cover mx-auto"
-            />
+              {/* Profile Image Upload */}
+                 <ProfileUpload />
 
             <h2 className="text-xl text-center mt-4 font-semibold">
               {user.name}

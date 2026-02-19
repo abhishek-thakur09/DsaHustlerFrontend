@@ -1,9 +1,12 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState } from "react";
+import { setUser } from "../Slice/AuthSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import api from "../utils/api";
 
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,21 +14,26 @@ const Login = () => {
 
 
 
-  const { loginUser } = useContext(AuthContext);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
 
+  try {
+    const res = await api.post("/auth/login", {
+      email,
+      password,
+    });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    try {
-      const data = await loginUser(email, password);
-      navigate("/"); 
-      
-      console.log("Login success:", data);
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    }
-  };
+    localStorage.setItem("token", res.data.token);
+
+    // store user in redux
+    dispatch(setUser(res.data.user)); // or res.data (depends on your API)
+    navigate("/");
+  } catch (err) {
+    setError(err.response?.data?.message || "Login failed");
+  }
+};
+
 
   return (
     <div className="flex w-full h-screen bg-black overflow-hidden">
@@ -44,17 +52,13 @@ const Login = () => {
               DSA<span className="text-red-500">hustler</span>
             </div>
 
-            <h2 className="text-2xl font-semibold text-center mb-2">
-              Welcome
-            </h2>
+            <h2 className="text-2xl font-semibold text-center mb-2">Welcome</h2>
             <p className="text-center text-gray-500 mb-6">
               Log in to DSAhustler
             </p>
 
             {error && (
-              <p className="text-red-500 text-sm text-center mb-4">
-                {error}
-              </p>
+              <p className="text-red-500 text-sm text-center mb-4">{error}</p>
             )}
 
             <form className="space-y-5" onSubmit={handleSubmit}>

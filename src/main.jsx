@@ -4,15 +4,13 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 
-import { AuthProvider } from "./context/AuthContext";
-import { ProblemsProvider } from "./context/ProblemContext.jsx";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.js";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <AuthProvider>
-      <ProblemsProvider>
+        <Provider store={store}>
         <App />
-      </ProblemsProvider>
-    </AuthProvider>
+        </Provider>
   </BrowserRouter>,
 );

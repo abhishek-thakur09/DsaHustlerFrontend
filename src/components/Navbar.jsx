@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../Slice/AuthSlice";
+import EditProblem from "./EditProblem";
 
 const Logo = () => {
   return (
@@ -18,19 +20,24 @@ const Logo = () => {
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+
+  const isLoggedIn = !!user;
 
   const [isOpen, setIsOpen] = useState(false);
-
-  const { isLoggedIn, logout, loading } = useContext(AuthContext);
-
-  console.log(isLoggedIn);
-
 
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  if (loading) return null;
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("token"); // optional
+    navigate("/");
+  };
+
+  // if (loading) return null;
 
   return (
     <nav className="w-full sticky top-0 z-50 bg-gradient-to-r from-gray-900 to-[#0f172a]">
@@ -41,8 +48,11 @@ const Navbar = () => {
 
         {/* DESKTOP MENU */}
         <div className="hidden lg:flex items-center gap-8 text-gray-400">
-          {isLoggedIn && (
+          {
             <>
+              <span className="text-white">
+                Welcome {user?.role === "admin" ? "Admin" : user?.name}
+              </span>
               <button
                 onClick={() => navigate("/problems")}
                 className={`hover:text-white ${
@@ -52,27 +62,30 @@ const Navbar = () => {
                 Problems
               </button>
 
-              <button
-                onClick={() => navigate("/profile")}
-                className={`hover:text-white ${
-                  location.pathname === "/profile" ? "text-white" : ""
-                }`}
-              >
-                Profile
-              </button>
+              {isLoggedIn && (
+                <button
+                  onClick={() => navigate("/profile")}
+                  className={`hover:text-white ${
+                    location.pathname === "/profile" ? "text-white" : ""
+                  }`}
+                >
+                  Profile
+                </button>
+              )}
             </>
-          )}
+          }
         </div>
-
         {/* RIGHT */}
         <div className="hidden lg:flex items-center gap-4">
           {isLoggedIn ? (
-            <button
-              onClick={logout}
-              className="text-white px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400"
-            >
-              Logout
-            </button>
+            <>
+              <button
+                onClick={handleLogout}
+                className="text-white px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400"
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <>
               <button
@@ -126,12 +139,12 @@ const Navbar = () => {
                 Profile
               </button>
 
+              <span className="block text-white py-2">
+                Welcome, {user?.role === "admin" ? "Admin" : user?.name}
+              </span>
+
               <button
-                onClick={() => {
-                  logout();
-                  setIsOpen(false);
-                  navigate("/");
-                }}
+                onClick={handleLogout}
                 className="block text-white px-4 py-2 rounded-lg bg-red-500"
               >
                 Logout

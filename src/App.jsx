@@ -1,5 +1,9 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "./Slice/AuthSlice";
+import api from "./utils/api";
+
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";
 import Problems from "./components/Problems";
@@ -8,9 +12,33 @@ import Navbar from "./components/Navbar";
 import EditProfile from "./components/EditProfile";
 import Register from "./components/Register";
 import ProblemDetails from "./components/ProblemDetails";
+import EditProblem from "./components/EditProblem";
+import UpdateProblem from "./components/UpdateProblem";
 
 
 function App() {
+  const dispatch = useDispatch();
+
+
+   useEffect(() => {
+    const loadUser = async () => {
+      const token = localStorage.getItem("token");
+
+      // if no token → user not logged in
+      if (!token) return;
+
+      try {
+        // verify token + fetch user
+        const res = await api.get("/auth/loggedinUser");
+        dispatch(setUser(res.data.user));
+      } catch (err) {
+        localStorage.removeItem("token");
+      }
+    };
+
+    loadUser();
+  }, []);
+
   return (
     <>
       <Navbar/>
@@ -22,6 +50,8 @@ function App() {
       <Route path= "/updateProfile" element={<EditProfile />}/>
       <Route path="/signin" element={<Register />} />
       <Route path="/singleProblem/:id" element={<ProblemDetails />}></Route>
+      <Route path="/manageproblems" element={ <EditProblem/>}></Route>
+      <Route path="/edit-problem/:id" element = {<UpdateProblem/>}></Route>
     </Routes>
     </>
   );

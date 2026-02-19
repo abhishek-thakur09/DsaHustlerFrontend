@@ -1,45 +1,50 @@
-import React, { useContext } from "react";
+import React from "react";
 import api from "../utils/api";
-import { AuthContext } from "../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../Slice/AuthSlice";
 import { useNavigate } from "react-router-dom";
 
 const ProfileUpload = () => {
-  const { user, updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  if (!user) return <h1 className="text-white">Please login</h1>;
+ const user = useSelector((state) => state.auth.user);
 
-  const handleChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+if (!user) return <h1 className="text-white">Loading...</h1>;
 
-    try {
-      const formData = new FormData();
-      formData.append("profileImage", file);
 
-      const res = await api.post("/auth/upload", formData, {
-        withCredentials: true,
-      });
+const handleChange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-      // ⭐ update global user state
-      updateUser(res.data.user);
+  // validate file
+  if (!file.type.startsWith("image/")) {
+    alert("Please upload an image");
+    return;
+  }
 
-      // ⭐ redirect to profile page
-      // navigate("/profile");
+  try {
+    const formData = new FormData();
+    formData.append("profileImage", file);
 
-      // // optional hard refresh
-      window.location.reload();
+    const res = await api.post("/auth/upload", formData);
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    // update redux user globally
+    dispatch(setUser(res.data.user));
+
+    console.log("Profilephoto updated:", res.data.user);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 
   return (
     <div className="relative w-40 h-40 mx-auto">
-
       <img
-        src={user.profileImage || "/default-avatar.png"}
+        src={user?.profileImage || "/default-avatar.png"}
         alt="profile"
         className="w-full h-full rounded-full object-cover cursor-pointer border-4 border-green-500"
         onClick={() => document.getElementById("profileUpload").click()}
@@ -51,7 +56,6 @@ const ProfileUpload = () => {
         className="hidden"
         onChange={handleChange}
       />
-
     </div>
   );
 };
