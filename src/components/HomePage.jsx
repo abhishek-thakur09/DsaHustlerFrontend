@@ -110,7 +110,7 @@ const HomePage = () => {
 
       {/* ANALYTICS */}
       <button
-        onClick={() => navigate("/analytics")}
+        onClick={() => navigate("/#")}
         className="
         p-6 rounded-xl
         bg-gradient-to-r from-orange-500 to-red-400
@@ -118,7 +118,7 @@ const HomePage = () => {
         shadow-lg"
       >
         <h3 className="text-xl font-semibold">Analytics</h3>
-        <p className="text-sm opacity-80">Platform statistics</p>
+        <p className="text-3xl opacity-80">Comming Soon</p>
       </button>
 
     </div>

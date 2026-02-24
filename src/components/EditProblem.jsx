@@ -59,7 +59,7 @@ const ManageProblems = () => {
           placeholder="Search problems..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="mb-6 p-3 w-full bg-[#0f172a] border border-slate-700 rounded"
+          className="mb-6 p-3 w-96 bg-[#0f172a] border border-slate-700 rounded"
         />
       </div>
 
@@ -68,11 +68,11 @@ const ManageProblems = () => {
           <div
             key={problem._id}
             className="flex justify-between items-center 
-        bg-[#0f172a] border border-slate-800 rounded-xl px-6 py-4 w-full
+        bg-[#0f172a] border border-slate-800 rounded-xl px-6 py-4 w-96
         hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10
         transition-all duration-300 cursor-pointer"
           >
-            <span className="block w-80 ">{problem.title}</span>
+            <span className="block w-1/3 ">{problem.title}</span>
 
             {/* EDIT */}
             <button

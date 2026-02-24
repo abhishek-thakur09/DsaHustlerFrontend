@@ -1,13 +1,29 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileUpload from "./ProfileUpdate";
+import api from "../utils/api";
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
   const loading = useSelector((state) => state.auth.loading);
   const total = useSelector((state) => state.problems.total);
   const navigate = useNavigate();
+  const [totalproblem, settotalProblems] = useState(0);
+
+     useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const res = await api.get("/api/problems?page=1&limit=10");
+
+        settotalProblems(res.data.total);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchAll();
+  }, []);
 
 
 
@@ -54,7 +70,7 @@ const Profile = () => {
             <h3 className="text-lg mb-4">Solved Problems</h3>
 
             <div className="text-5xl font-bold">
-              0<span className="text-gray-500 text-xl">/{total}</span>
+              0<span className="text-gray-500 text-xl">/{totalproblem}</span>
             </div>
 
             <p className="text-green-400 mt-2">Solved</p>

@@ -50,9 +50,6 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-8 text-gray-400">
           {
             <>
-              <span className="text-white">
-                Welcome {user?.role === "admin" ? "Admin" : user?.name}
-              </span>
               <button
                 onClick={() => navigate("/problems")}
                 className={`hover:text-white ${
@@ -138,11 +135,6 @@ const Navbar = () => {
               >
                 Profile
               </button>
-
-              <span className="block text-white py-2">
-                Welcome, {user?.role === "admin" ? "Admin" : user?.name}
-              </span>
-
               <button
                 onClick={handleLogout}
                 className="block text-white px-4 py-2 rounded-lg bg-red-500"

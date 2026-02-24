@@ -14,6 +14,9 @@ import Register from "./components/Register";
 import ProblemDetails from "./components/ProblemDetails";
 import EditProblem from "./components/EditProblem";
 import UpdateProblem from "./components/UpdateProblem";
+import AddProblem from "./components/AddProblem";
+import ManageProblems from "./components/EditProblem";
+import ManageUsers from "./components/ManageUsers";
 
 
 function App() {
@@ -52,6 +55,8 @@ function App() {
       <Route path="/singleProblem/:id" element={<ProblemDetails />}></Route>
       <Route path="/manageproblems" element={ <EditProblem/>}></Route>
       <Route path="/edit-problem/:id" element = {<UpdateProblem/>}></Route>
+      <Route path="/add-problem" element = {<AddProblem/>}></Route>
+      <Route path="/manage-users" element= {<ManageUsers/>}></Route>
     </Routes>
     </>
   );
