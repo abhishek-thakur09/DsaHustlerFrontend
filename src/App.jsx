@@ -17,6 +17,9 @@ import UpdateProblem from "./components/UpdateProblem";
 import AddProblem from "./components/AddProblem";
 import ManageProblems from "./components/EditProblem";
 import ManageUsers from "./components/ManageUsers";
+import Contact from "./components/Contact";
+import About from "./components/About";
+import AIhint from "./components/AIhint";
 
 
 function App() {
@@ -57,6 +60,9 @@ function App() {
       <Route path="/edit-problem/:id" element = {<UpdateProblem/>}></Route>
       <Route path="/add-problem" element = {<AddProblem/>}></Route>
       <Route path="/manage-users" element= {<ManageUsers/>}></Route>
+      <Route path="/contact" element = {<Contact/>}></Route>
+      <Route path="/about" element= {<About/>}></Route>
+      <Route path="/aihint" element={<AIhint/>}></Route>
     </Routes>
     </>
   );

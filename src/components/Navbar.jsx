@@ -58,6 +58,30 @@ const Navbar = () => {
               >
                 Problems
               </button>
+              <button
+                onClick={() => navigate("/contact")}
+                className={`hover:text-white hover: border-y-white ${
+                  location.pathname === "/problems" ? "text-white" : ""
+                }`}
+              >
+                Contact
+              </button>
+              <button
+                onClick={() => navigate("/about")}
+                className={`hover:text-white ${
+                  location.pathname === "/problems" ? "text-white" : ""
+                }`}
+              >
+                About
+              </button>
+               <button
+                onClick={() => navigate("/aihint")}
+                className={`hover:text-white ${
+                  location.pathname === "/problems" ? "text-white" : ""
+                }`}
+              >
+               AI hint
+              </button>
 
               {isLoggedIn && (
                 <button
@@ -125,7 +149,22 @@ const Navbar = () => {
               >
                 Problems
               </button>
-
+              <button
+                onClick={() => navigate("/contact")}
+                className={ `block text-gray-300 hover:text-white hover: border-y-white ${
+                  location.pathname === "/problems" ? "text-white" : ""
+                }`}
+              >
+                Contact
+              </button>
+              <button
+                onClick={() => navigate("/about")}
+                className={`block text-gray-300 hover:text-white ${
+                  location.pathname === "/problems" ? "text-white" : ""
+                }`}
+              >
+                About
+              </button>
               <button
                 onClick={() => {
                   navigate("/profile");

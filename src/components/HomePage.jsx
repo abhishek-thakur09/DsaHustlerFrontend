@@ -169,7 +169,7 @@ const HomePage = () => {
             </button>
 
             <button
-              onClick={() => navigate("/problems")}
+              onClick={() => navigate("/contact")}
               className="
               px-8 py-3 rounded-lg
               bg-white/5 border-cyan-400 text-cyan-300
@@ -177,7 +177,7 @@ const HomePage = () => {
               transition
             "
             >
-              Explore Problems
+              Contact Us
             </button>
           </div>
 
@@ -200,9 +200,56 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <footer>
-        
-      </footer>
+   <footer className="bg-black text-gray-400 border-t border-gray-800 relative overflow-hidden">
+      
+      {/* glow background */}
+      <div className="absolute w-[400px] h-[200px] bg-cyan-500/10 blur-[120px] rounded-full"></div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-12">
+
+        {/* TOP SECTION */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
+
+          {/* BRAND */}
+          <div>
+            <h2 className="text-2xl font-bold text-white">DSA Hustler</h2>
+            <p className="mt-3 text-sm">
+              Practice coding with structured patterns and build real problem-solving skills.
+            </p>
+          </div>
+
+          {/* QUICK LINKS */}
+          <div>
+            <h3 className="text-white font-semibold mb-3">Quick Links</h3>
+
+            <ul className="space-y-2 text-sm">
+              <li onClick={()=> navigate("/")} className="hover:text-cyan-400 cursor-pointer">Home</li>
+              <li onClick={()=> navigate("/problems")} className="hover:text-cyan-400 cursor-pointer">Problems</li>
+              <li onClick={()=> navigate("/about")}  className="hover:text-cyan-400 cursor-pointer">About</li>
+              <li onClick={()=> navigate("/contact")}  className="hover:text-cyan-400 cursor-pointer">Contact</li>
+            </ul>
+          </div>
+
+          {/* SOCIAL LINKS */}
+          <div>
+            <h3 className="text-white font-semibold mb-3">Connect</h3>
+
+            <ul className="space-y-2 text-sm">
+              <li className="hover:text-cyan-400 cursor-pointer">GitHub</li>
+              <li className="hover:text-cyan-400 cursor-pointer">LinkedIn</li>
+              <li className="hover:text-cyan-400 cursor-pointer">Twitter</li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* BOTTOM COPYRIGHT */}
+        <div className="border-t border-gray-800 mt-10 pt-6 text-center text-sm">
+          © {new Date().getFullYear()} DSA Hustler. Built with ❤️ by Abhishek.
+        </div>
+
+      </div>
+    </footer>
       </div>     
     }
     </>
