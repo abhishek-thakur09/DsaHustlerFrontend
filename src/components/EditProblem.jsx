@@ -14,13 +14,14 @@ const ManageProblems = () => {
       let page = 1;
       let totalPages = 1;
 
-      while (page <= totalPages) {
+      do {
         const res = await api.get(`/api/problems?page=${page}&limit=20`);
 
         allProblems = [...allProblems, ...res.data.problems];
         totalPages = res.data.totalPages; // backend must send this
         page++;
       }
+      while (page <= totalPages);
 
       setProblems(allProblems);
     } catch (err) {
@@ -35,8 +36,9 @@ const ManageProblems = () => {
   // delete problem
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/api/delete-problem/${id}`);
+     const res = await api.delete(`/api/delete-problem/${id}`);
       alert("Problem deleted");
+      console.log(res);
 
       // refresh list
       fetchProblems();

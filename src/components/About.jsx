@@ -6,7 +6,6 @@ const About = () => {
 
       {/* Heading */}
       <div className="text-center mb-12">
-        <p className="text-sm text-slate-400">// ABOUT_US.CPP</p>
 
         <h1 className="text-5xl font-bold mt-4">
           We Turn <span className="gradient-text">Coders</span> Into Problem Solvers

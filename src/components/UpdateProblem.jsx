@@ -40,7 +40,7 @@ const UpdateProblem = () => {
     try {
       console.log(id);
 
-      await axios.patch(BASE_URL + `api/update-problem/${id}`, formdata);
+      await api.patch(`/api/update-problem/${id}`, formdata);
 
       alert("Problem updated successfully");
     } catch (error) {

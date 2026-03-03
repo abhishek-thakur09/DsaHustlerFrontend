@@ -43,6 +43,7 @@ const EditProfile = () => {
       setLoading(true);
 
       const res = await api.patch("/auth/update", formData);
+      console.log(res);
 
       dispatch(setUser(res.data.user));
       alert("Profile updated successfully!");
