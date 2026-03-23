@@ -16,74 +16,66 @@ const Problems = () => {
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState([]);
 
-  const allTags = [
-    "Array",
-    "Two Pointer",
-    "DP",
-    "Graph",
-    "Tree",
-    "backtrack",
-    "binary search",
-    "binary tree",
-  ];
+ const allTags = [
+  "array",
+  "two-pointers",
+  "fast-slow-pointers",
+  "sliding-window",
+  "kadane",
+  "prefix-sum",
+  "merge-intervals",
+  "cyclic-sort",
+  "linked-list",
+  "stack",
+  "queue",
+  "hash-map",
+  "binary-search",
+  "graph",
+  "bfs",
+  "dfs",
+  "matrix",
+  "two-heaps",
+  "subsets",
+  "bitwise",
+  "top-k-elements",
+  "k-way-merge",
+  "greedy",
+  "dynamic-programming",
+  "backtracking",
+  "trie",
+  "topological-sort",
+  "union-find",
+  "tree",
+  "binary-tree"
+];
 
 
-const handleDifficulty = async (level) => {
-  try {
-    setDifficulty(level);
+useEffect(() => {
+  if (selectedTags.length === 0) {
+    setProblems(allProblems);
+    return;
+  }
 
-    const res = await api.get(`/api/difficultylevel/${level}`);
+  const filtered = allProblems.filter((problem) =>
+    problem.tags?.some((tag) => selectedTags.includes(tag)),
+  );
+
+  setProblems(filtered);
+}, [selectedTags, allProblems]);
+
+useEffect(() => {
+  const fetchData = async () => {
+    const res = await api.get(`/api/problems?page=${page}&limit=${limit}`);
 
     setProblems(res.data.problems);
+    setAllProblems(res.data.problems);  
+    setTotalPages(res.data.totalPages);
 
-  } catch (error) {
-    console.log("Error fetching difficulty:", error);
-  }
-};
+    dispatch(setTotalProblems(res.data.totalPages));
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.get(`/api/problems?page=${page}&limit=${limit}`);
-
-      console.log(res);
-      setProblems(res.data.problems);
-      setTotalPages(res.data.totalPages);
-      dispatch(setTotalProblems(res.data.totalPages));
-    };
-
-    fetchData();
-  }, [page]);
-
-  useEffect(() => {
-    const fetchAllProblems = async () => {
-      try {
-        let currentPage = 1;
-        let total = 1;
-        let allProblems = [];
-
-        //fetching all problems
-        while (currentPage <= total) {
-          const res = await api.get(
-            `/api/problems?page=${currentPage}&limit=${limit}`,
-          );
-
-          allProblems = [...allProblems, ...res.data.problems];
-
-          total = res.data.totalPages;
-
-          currentPage++;
-        }
-
-        // store ALL problems
-        setAllProblems(allProblems);
-        setProblems(allProblems);
-      } catch (err) {
-        console.log("Fetch error:", err);
-      }
-    };
-
-    fetchAllProblems();
-  }, []);
+  fetchData();
+}, [page]);
 
   const getVisiblePages = () => {
     let start = Math.max(1, page - 1);

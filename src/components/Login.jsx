@@ -37,19 +37,14 @@ const Login = () => {
 
   return (
     <div className="flex w-full h-screen bg-black overflow-hidden">
-      {/* LEFT IMAGE */}
-      <div className="hidden lg:flex w-1/2 h-full">
-        <img src="/Side.png" alt="Side" className="w-80 h-auto object-cover" />
-      </div>
-
       {/* RIGHT LOGIN */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-4">
+      <div className="w-full lg:w-full flex items-center justify-center px-4">
         <div className="relative group">
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[360px] blur-[80px] rounded-3xl group-hover:bg-blue-500/70" />
 
           <div className="relative z-10 w-full max-w-md p-8 bg-white/90 rounded-2xl shadow-xl">
             <div className="text-center mb-6 text-3xl font-bold">
-              DSA<span className="text-red-500">hustler</span>
+              DSA<span className="text-blue-500">hustler</span>
             </div>
 
             <h2 className="text-2xl font-semibold text-center mb-2">Welcome</h2>

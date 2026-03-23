@@ -28,13 +28,12 @@ const ProblemDetails = () => {
   return (
     <div className="h-screen bg-black text-amber-50 flex">
       {/* LEFT  */}
-      <div className="w-1/2 border-r border-slate-800  rounded-2xl p-6 overflow-y-auto">
+      <div className="w-1/2 border-r border-slate-800  rounded-2xl p-4 overflow-y-auto">
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold m-5 text-center">
+          <h1 className="text-2xl font-bold text-center">
             {problem.title}
-          </h1>
-          <h3
-            className={`text-1xl m-1 px-2 py-1 rounded-2xl border transition
+          <h1
+            className={`text-1xl mt-5 w-1/2 p-2 item-center rounded-2xl border transition
       ${
         problem.difficulty === "easy"
           ? "text-green-400 border-green-400/30 hover:border-green-400"
@@ -44,7 +43,8 @@ const ProblemDetails = () => {
       }`}
           >
             {problem.difficulty}
-          </h3>
+          </h1>
+          </h1>
         </div>
 
         <div className="mt-4 text-slate-300">
@@ -74,9 +74,12 @@ const ProblemDetails = () => {
         </div>
 
         <div className="mt-4">
-          <strong>Constraints:</strong> {problem.constraints}
+          <strong>Constraints : </strong> {problem.constraints}
         </div>
       </div>
+
+        
+
     </div>
   );
 };
