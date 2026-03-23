@@ -11,7 +11,7 @@ import Profile from "./components/Profile";
 import Navbar from "./components/Navbar";
 import EditProfile from "./components/EditProfile";
 import Register from "./components/Register";
-import ProblemDetails from "./components/ProblemDetails";
+import CodeEditor1 from "./components/CodeEditor1";
 import EditProblem from "./components/EditProblem";
 import UpdateProblem from "./components/UpdateProblem";
 import AddProblem from "./components/AddProblem";
@@ -19,7 +19,7 @@ import ManageProblems from "./components/EditProblem";
 import ManageUsers from "./components/ManageUsers";
 import Contact from "./components/Contact";
 import About from "./components/About";
-import AIhint from "./components/AIhint";
+import AIhint from "./components/AiChat";
 
 
 function App() {
@@ -55,7 +55,7 @@ function App() {
       <Route path= "/profile" element={<Profile />}/>
       <Route path= "/updateProfile" element={<EditProfile />}/>
       <Route path="/signin" element={<Register />} />
-      <Route path="/singleProblem/:id" element={<ProblemDetails />}></Route>
+      <Route path="/singleProblem/:id" element={<CodeEditor1 />}></Route>
       <Route path="/manageproblems" element={ <EditProblem/>}></Route>
       <Route path="/edit-problem/:id" element = {<UpdateProblem/>}></Route>
       <Route path="/add-problem" element = {<AddProblem/>}></Route>
