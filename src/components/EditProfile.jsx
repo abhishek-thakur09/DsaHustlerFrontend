@@ -10,12 +10,14 @@ const EditProfile = () => {
   const user = useSelector((state) => state.auth.user);
 
   const [loading, setLoading] = useState(false);
+  
 
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
     likedInProfile: "",
     GithubProfile: "",
+    Bio : "",
   });
 
   useEffect(() => {
@@ -25,6 +27,7 @@ const EditProfile = () => {
         lastName: user.lastName || "",
         likedInProfile: user.likedInProfile || "",
         GithubProfile: user.GithubProfile || "",
+        Bio : user.bio || "",
       });
     }
   }, [user]);
@@ -37,7 +40,7 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // prevent reload
+    e.preventDefault(); 
 
     try {
       setLoading(true);

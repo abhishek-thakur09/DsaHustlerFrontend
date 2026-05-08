@@ -20,8 +20,6 @@ const About = () => {
       {/* Mission Card */}
       <div className="bg-[#0f172a] rounded-2xl p-10 max-w-4xl mx-auto shadow-lg">
 
-        <p className="text-sm text-slate-400 mb-3">{"> cat mission.txt"}</p>
-
         <h2 className="text-3xl font-semibold mb-4">Our Mission</h2>
 
         <p className="text-slate-400 leading-relaxed">

@@ -62,7 +62,7 @@ return (
         <p className="text-gray-500 text-2xl">No users found</p>
       )}
 
-      {users.map((item) => (
+      {users.filter(user => user.role !== "admin").map((item) => (
         <div
           key={item._id}
           className="flex flex-col items-center 

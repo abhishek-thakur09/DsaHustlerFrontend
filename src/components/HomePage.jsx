@@ -8,42 +8,15 @@ import { useSelector} from "react-redux";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [user, setTotalUsers] = useState(0);
-  const [totalProblems, settotalProblems] = useState(0);
   const Loggedinuser = useSelector((state) => state.auth.user);
-
-  console.log(Loggedinuser);
-
   const isAdmin = Loggedinuser?.role === "admin";
-
-  useEffect(()=>{
-
-    const users = async()=>{
-      const res = await api.get("/auth/stats");
-      setTotalUsers(res.data.totalUsers);
-    }
-    users();
-  },[])
-
-    useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const res = await api.get("/api/problems?page=1&limit=10");
-
-        settotalProblems(res.data.total);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchAll();
-  }, []);
+ 
 
 
   return (
     <>
      {isAdmin &&
-      // ✅ ADMIN DASHBOARD
+      
       <div className="min-h-[90vh] flex items-center justify-center bg-black text-white relative overflow-hidden">
   {/* glow background */}
   <div className="absolute w-[600px] h-[400px] bg-purple-500/10 blur-[120px] rounded-full"></div>
@@ -158,8 +131,8 @@ const HomePage = () => {
               onClick={() => navigate("/problems")}
               className="
               px-8 py-3 rounded-lg
-              bg-blue-400 text-white font-medium
-              hover:bg-blue-300
+              bg-blue-600 text-white font-medium
+              hover:bg-blue-500
               transition
               flex items-center gap-2 justify-center
               shadow-[0_0_20px_rgba(52,211,153,0.4)]
@@ -179,24 +152,6 @@ const HomePage = () => {
             >
               Contact Us
             </button>
-          </div>
-
-          {/* STATS */}
-          <div className="mt-14 grid grid-cols-3 gap-6 text-center">
-            <div>
-              <h3 className="text-3xl font-bold text-cyan-400">{totalProblems}+</h3>
-              <p className="text-gray-400 text-sm">Problems</p>
-            </div>
-
-            <div>
-              <h3 className="text-3xl font-bold text-cyan-400">{user}</h3>
-              <p className="text-gray-400 text-sm">Users</p>
-            </div>
-
-            <div>
-              <h3 className="text-3xl font-bold text-cyan-400">0</h3>
-              <p className="text-gray-400 text-sm">Submissions</p>
-            </div>
           </div>
         </div>
       </section>

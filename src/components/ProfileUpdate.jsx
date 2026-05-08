@@ -2,60 +2,68 @@ import React from "react";
 import api from "../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../Slice/AuthSlice";
-import { useNavigate } from "react-router-dom";
+ 
 
 const ProfileUpload = () => {
-  const navigate = useNavigate();
+  
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
- const user = useSelector((state) => state.auth.user);
+  if (!user) return null;
 
-if (!user) return <h1 className="text-white">Loading...</h1>;
+  const handleChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image");
+      return;
+    }
 
-const handleChange = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    try {
+      const formData = new FormData();
+      formData.append("profileImage", file);
 
-  // validate file
-  if (!file.type.startsWith("image/")) {
-    alert("Please upload an image");
-    return;
-  }
+      // Your backend should return the updated user object
+      const res = await api.post("/auth/upload", formData);
 
-  try {
-    const formData = new FormData();
-    formData.append("profileImage", file);
-
-    const res = await api.post("/auth/upload", formData);
-
-    // update redux user globally
-    dispatch(setUser(res.data.user));
-
-    console.log("Profilephoto updated:", res.data.user);
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-
+      // Update Redux state
+      dispatch(setUser(res.data.user));
+    } catch (err) {
+      console.error("Upload error:", err);
+    }
+  };
 
   return (
-    <div className="relative w-40 h-40 mx-auto">
-      <img
-        src={user?.profileImage || "/default-avatar.png"}
-        alt="profile"
-        className="w-full h-full rounded-full object-cover cursor-pointer border-4 border-green-500"
-        onClick={() => document.getElementById("profileUpload").click()}
-      />
+    <div className="relative group w-32 h-32 lg:w-40 lg:h-40">
+      {/* Using a label means clicking the image OR the overlay 
+         automatically triggers the hidden file input.
+      */}
+      <label htmlFor="profileUpload" className="cursor-pointer block h-full w-full">
+        <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-blue-500 transition-all duration-300 group-hover:border-blue-500 shadow-lg group-hover:shadow-blue-500/20">
+          
+          <img
+            src={user?.profileImage || "/default-avatar.png"}
+            alt="profile"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
 
-      <input
-        type="file"
-        id="profileUpload"
-        className="hidden"
-        onChange={handleChange}
-      />
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="text-white text-xs font-bold uppercase tracking-tighter">
+              Change Photo
+            </span>
+          </div>
+        </div>
+
+        <input
+          type="file"
+          id="profileUpload"
+          className="hidden"
+          accept="image/*"
+          onChange={handleChange}
+        />
+      </label>
     </div>
   );
 };

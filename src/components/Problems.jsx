@@ -2,39 +2,61 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setTotalProblems } from "../Slice/ProblemSlice";
-import {useProblem} from "../hooks/useProblem";
+import { useProblem } from "../hooks/useProblem";
 
 const Problems = () => {
   const [allProblems, setAllProblems] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [filteredProblems, setFilteredProblems] = useState([]);
 
-  const [page, setPage] = useState(1);
-  const limit = 10;
-
-  const { problems, totalPages } = useProblem(page, limit);
-  
+  const { problems } = useProblem();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const allTags = [
-    "array","two-pointers","fast-slow-pointers","sliding-window","kadane",
-    "prefix-sum","merge-intervals","cyclic-sort","linked-list","stack",
-    "queue","hash-map","binary-search","graph","bfs","dfs","matrix",
-    "two-heaps","subsets","bitwise","top-k-elements","k-way-merge",
-    "greedy","dynamic-programming","backtracking","trie",
-    "topological-sort","union-find","tree","binary-tree"
+    "array",
+    "two-pointers",
+    "fast-slow-pointers",
+    "sliding-window",
+    "kadane",
+    "prefix-sum",
+    "merge-intervals",
+    "cyclic-sort",
+    "linked-list",
+    "stack",
+    "queue",
+    "hash-map",
+    "binary-search",
+    "graph",
+    "bfs",
+    "dfs",
+    "matrix",
+    "two-heaps",
+    "subsets",
+    "bitwise",
+    "top-k-elements",
+    "k-way-merge",
+    "greedy",
+    "dynamic-programming",
+    "backtracking",
+    "trie",
+    "topological-sort",
+    "union-find",
+    "tree",
+    "binary-tree",
   ];
 
-  // hook data
+  // Sync hook data to local state
   useEffect(() => {
-    setAllProblems(problems);
-    setFilteredProblems(problems);
-    dispatch(setTotalProblems(problems.length));
-  }, [problems]);
+    if (problems) {
+      setAllProblems(problems);
+      setFilteredProblems(problems);
+      dispatch(setTotalProblems(problems.length));
+    }
+  }, [problems, dispatch]);
 
-  // Tag filtering
+  // Tag filtering logic
   useEffect(() => {
     if (selectedTags.length === 0) {
       setFilteredProblems(allProblems);
@@ -42,7 +64,7 @@ const Problems = () => {
     }
 
     const filtered = allProblems.filter((problem) =>
-      problem.tags?.some((tag) => selectedTags.includes(tag))
+      problem.tags?.some((tag) => selectedTags.includes(tag)),
     );
 
     setFilteredProblems(filtered);
@@ -56,24 +78,8 @@ const Problems = () => {
     }
   };
 
-  const getVisiblePages = () => {
-    let start = Math.max(1, page - 1);
-    let end = Math.min(totalPages, page + 1);
-
-    if (end - start < 2) {
-      if (start === 1) {
-        end = Math.min(3, totalPages);
-      } else if (end === totalPages) {
-        start = Math.max(1, totalPages - 2);
-      }
-    }
-
-    return [...Array(end - start + 1)].map((_, i) => start + i);
-  };
-
   return (
     <div className="bg-black min-h-[calc(100vh-80px)] mx-auto px-6 py-8">
-      
       {/* Heading */}
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold text-white mb-8">All Problems</h1>
@@ -99,70 +105,38 @@ const Problems = () => {
 
       {/* Problems List */}
       <div className="space-y-4">
-        {filteredProblems.map((p) => (
-          <div
-            key={p._id}
-            className="flex justify-between items-center 
-              bg-[#0f172a] border border-slate-800 rounded-xl px-6 py-4
-              hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10
-              transition-all duration-300 cursor-pointer"
-            onClick={() => navigate(`/singleProblem/${p._id}`)}
-          >
-            <div className="text-slate-200 font-medium">{p.title}</div>
-
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-semibold
-                ${
-                  p.difficulty === "easy"
-                    ? "bg-green-500/20 text-green-400"
-                    : p.difficulty === "medium"
-                    ? "bg-yellow-500/20 text-yellow-400"
-                    : "bg-red-500/20 text-red-400"
-                }`}
+        {filteredProblems.length > 0 ? (
+          filteredProblems.map((p) => (
+            <div
+              key={p._id}
+              className="flex justify-between items-center 
+    bg-[#0f172a] border border-slate-800 rounded-xl px-6 py-4
+    hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10
+    transition-all duration-300 cursor-pointer 
+    hover:translate-y-1"
+              onClick={() => navigate(`/singleProblem/${p._id}`)}
             >
-              {p.difficulty}
-            </span>
+              <div className="text-slate-200 font-medium">{p.title}</div>
+
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-semibold
+                  ${
+                    p.difficulty === "easy"
+                      ? "bg-green-500/20 text-green-400"
+                      : p.difficulty === "medium"
+                        ? "bg-yellow-500/20 text-yellow-400"
+                        : "bg-red-500/20 text-red-400"
+                  }`}
+              >
+                {p.difficulty}
+              </span>
+            </div>
+          ))
+        ) : (
+          <div className="text-slate-500 text-center py-10">
+            No problems found for these tags.
           </div>
-        ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-center mt-12">
-        <div className="flex items-center gap-3 bg-[#0f172a] border border-slate-800 rounded-xl px-4 py-3 shadow-lg">
-          
-          <button
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 
-              hover:bg-blue-500 hover:text-white transition disabled:opacity-40"
-          >
-            ← Previous
-          </button>
-
-          {getVisiblePages().map((num) => (
-            <button
-              key={num}
-              onClick={() => setPage(num)}
-              className={`px-4 py-2 rounded-lg transition
-                ${
-                  page === num
-                    ? "bg-blue-500 text-white"
-                    : "bg-slate-800 text-slate-300 hover:bg-blue-500 hover:text-white"
-                }`}
-            >
-              {num}
-            </button>
-          ))}
-
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage(page + 1)}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 
-              hover:bg-blue-500 hover:text-white transition disabled:opacity-40"
-          >
-            Next →
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

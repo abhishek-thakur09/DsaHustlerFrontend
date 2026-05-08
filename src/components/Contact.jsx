@@ -1,48 +1,77 @@
-import React from "react";
+import React,{useState,useRef} from "react";
 import { Github, Twitter, MessageSquare, Send } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
-const ContactSection = () => {
+
+  const ContactSection = () => {
+  const form = useRef();
+  const [isSending, setIsSending] = useState(false);
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setIsSending(true);
+
+    emailjs.sendForm(
+      'service_2ebxo0g', 
+      'template_c95tbo9', 
+      form.current, 
+      'FS8VzignaA7j6SS8h'
+    )
+      .then((result) => {
+          alert("Message sent successfully!");
+          setIsSending(false);
+          e.target.reset();
+      }, (error) => {
+          console.error("EmailJS Error:", error);
+          alert("Failed to send message. Please try again.");
+          setIsSending(false);
+      });
+  };
+
   return (
     <div className="bg-black text-white min-h-screen py-20 px-6">
-
       <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
 
-        {/* LEFT SIDE — FORM */}
-        <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-8">
-
-          <p className="text-blue-400 mb-6">{"> compose_message()"}</p>
-
+        {/* LEFT SIDE — FIXED FORM TAG */}
+        <form 
+          ref={form} 
+          onSubmit={sendEmail} 
+          className="bg-[#0f172a] border border-gray-800 rounded-xl p-8"
+        >
+          <p className="text-blue-400 mb-6">Compose Message</p>
           <div className="space-y-6">
-
-            {/* Name */}
             <input
+              name="user_name"
               type="text"
+              required
               placeholder="Your name"
               className="w-full bg-[#1e293b] p-4 rounded-lg border border-gray-700 outline-none focus:border-blue-400"
             />
-
-            {/* Email */}
             <input
+              name="user_email"
               type="email"
+              required
               placeholder="you@example.com"
               className="w-full bg-[#1e293b] p-4 rounded-lg border border-gray-700 outline-none focus:border-blue-400"
             />
-
-            {/* Message */}
             <textarea
+              name="message"
               rows="5"
+              required
               placeholder="What's on your mind?"
               className="w-full bg-[#1e293b] p-4 rounded-lg border border-gray-700 outline-none focus:border-blue-400"
             />
-
-            {/* Button */}
-            <button className="w-full bg-blue-400 text-black font-semibold py-4 rounded-lg hover:bg-blue-500 transition flex items-center justify-center gap-2">
+            <button 
+              type="submit" // Explicitly set type to submit
+              disabled={isSending}
+              className="w-full bg-blue-400 text-black font-semibold py-4 rounded-lg hover:bg-blue-500 transition flex items-center justify-center gap-2 disabled:opacity-50"
+            >
               <Send size={18} />
-              send_message()
+              {isSending ? "Sending..." : "Send Message"}
             </button>
-
           </div>
-        </div>
+        </form>
+
 
         {/* RIGHT SIDE */}
         <div className="space-y-8">
@@ -50,7 +79,7 @@ const ContactSection = () => {
           {/* SOCIALS CARD */}
           <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-8">
 
-            <p className="text-blue-400 mb-6">// socials</p>
+            <p className="text-blue-400 mb-6">Socials</p>
 
             <div className="space-y-6">
 

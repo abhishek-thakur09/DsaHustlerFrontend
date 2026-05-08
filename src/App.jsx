@@ -20,37 +20,29 @@ import ManageUsers from "./components/ManageUsers";
 import Contact from "./components/Contact";
 import About from "./components/About";
 import AIhint from "./components/AiChat";
+import CodeRunner from "./components/CodeRunner";
 
 
 function App() {
   const dispatch = useDispatch();
 
-
-   useEffect(() => {
-    const loadUser = async () => {
-      const token = localStorage.getItem("token");
-
-      // if no token → user not logged in
-      if (!token) return;
-
-      try {
-        // verify token + fetch user
-        const res = await api.get("/auth/loggedinUser");
+  useEffect(() => {
+    api.get("/auth/loggedinUser", {
+      withCredentials: true,
+    })
+      .then((res) => {
         dispatch(setUser(res.data.user));
-      } catch (err) {
-        localStorage.removeItem("token");
-      }
-    };
+      })
+      .catch(() => {});
+  }, [dispatch]);
 
-    loadUser();
-  }, []);
 
   return (
     <>
       <Navbar/>
     <Routes>
-      <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/problems" element={<Problems />}/>
       <Route path= "/profile" element={<Profile />}/>
       <Route path= "/updateProfile" element={<EditProfile />}/>
@@ -63,6 +55,7 @@ function App() {
       <Route path="/contact" element = {<Contact/>}></Route>
       <Route path="/about" element= {<About/>}></Route>
       <Route path="/aihint" element={<AIhint/>}></Route>
+      <Route path="/singleProblem/:id" element={<CodeRunner />}/>
     </Routes>
     </>
   );

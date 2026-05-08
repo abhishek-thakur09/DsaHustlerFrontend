@@ -47,7 +47,7 @@ const Navbar = () => {
         </div>
 
         {/* DESKTOP MENU */}
-        <div className="hidden lg:flex items-center gap-8 text-gray-400">
+        <div className="hidden lg:flex items-center gap-8 text-gray-400 cursor-pointer">
           {
             <>
               <button
@@ -60,7 +60,7 @@ const Navbar = () => {
               </button>
               <button
                 onClick={() => navigate("/contact")}
-                className={`hover:text-white hover: border-y-white ${
+                className={`hover: border-y-white ${
                   location.pathname === "/problems" ? "text-white" : ""
                 }`}
               >
@@ -74,15 +74,6 @@ const Navbar = () => {
               >
                 About
               </button>
-               <button
-                onClick={() => navigate("/aihint")}
-                className={`hover:text-white ${
-                  location.pathname === "/problems" ? "text-white" : ""
-                }`}
-              >
-               AI hint
-              </button>
-
               {isLoggedIn && (
                 <button
                   onClick={() => navigate("/profile")}
@@ -97,7 +88,7 @@ const Navbar = () => {
           }
         </div>
         {/* RIGHT */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4 cursor-pointer">
           {isLoggedIn ? (
             <>
               <button
@@ -137,7 +128,7 @@ const Navbar = () => {
 
       {/* MOBILE MENU */}
       {isOpen && (
-        <div className="lg:hidden bg-gray-900 px-6 py-4 space-y-4">
+        <div className="lg:hidden bg-gray-900 px-6 py-4 space-y-4 cursor-pointer">
           {isLoggedIn && (
             <>
               <button
@@ -176,7 +167,7 @@ const Navbar = () => {
               </button>
               <button
                 onClick={handleLogout}
-                className="block text-white px-4 py-2 rounded-lg bg-red-500"
+                className="block text-white px-4 py-2 rounded-lg bg-red-600 hover:bg-red-400"
               >
                 Logout
               </button>
