@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import CodeRunner from "./CodeRunner";
 import ProblemDescription from "./ProblemDescription";
 import AIChat from "./AiChat";
-import Submission from "./Submission";
 import Editorial from "./Editorial";
 
 const ProblemDetails = () => {
@@ -38,18 +37,6 @@ const ProblemDetails = () => {
             >
               AiHint
             </button>
-
-            <button
-              onClick={() => setActiveTab("submission")}
-              className={`pb-2 ${
-                activeTab === "submission"
-                  ? "border-b-2 border-blue-500 text-blue-500"
-                  : "text-slate-400 hover:text-white"
-              }`}
-            >
-              Submission
-            </button>
-
             <button
               onClick={() => setActiveTab("editorial")}
               className={`pb-2 ${
@@ -65,7 +52,6 @@ const ProblemDetails = () => {
           {/* TAB CONTENT */}
           {activeTab === "description" && <ProblemDescription />}
           {activeTab === "aiChat" && <AIChat />}
-          {activeTab === "submission" && <Submission />}
           {activeTab === "editorial" && <Editorial />}
         </div>
 

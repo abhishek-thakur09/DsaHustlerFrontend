@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import { useSelector} from "react-redux";
+import { motion} from "framer-motion";
+
 
 
 
@@ -14,7 +16,11 @@ const HomePage = () => {
 
 
   return (
-    <>
+       <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 4, y: 0 }}
+  transition={{ duration: 0.2 }}
+>
      {isAdmin &&
       
       <div className="min-h-[90vh] flex items-center justify-center bg-black text-white relative overflow-hidden">
@@ -157,7 +163,6 @@ const HomePage = () => {
       </section>
    <footer className="bg-black text-gray-400 border-t border-gray-800 relative overflow-hidden">
       
-      {/* glow background */}
       <div className="absolute w-[400px] h-[200px] bg-cyan-500/10 blur-[120px] rounded-full"></div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-12">
@@ -207,7 +212,7 @@ const HomePage = () => {
     </footer>
       </div>     
     }
-    </>
+    </motion.div>
   );
 };
 

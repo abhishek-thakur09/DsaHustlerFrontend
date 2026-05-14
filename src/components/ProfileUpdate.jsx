@@ -24,10 +24,8 @@ const ProfileUpload = () => {
       const formData = new FormData();
       formData.append("profileImage", file);
 
-      // Your backend should return the updated user object
       const res = await api.post("/auth/upload", formData);
 
-      // Update Redux state
       dispatch(setUser(res.data.user));
     } catch (err) {
       console.error("Upload error:", err);
@@ -36,9 +34,6 @@ const ProfileUpload = () => {
 
   return (
     <div className="relative group w-32 h-32 lg:w-40 lg:h-40">
-      {/* Using a label means clicking the image OR the overlay 
-         automatically triggers the hidden file input.
-      */}
       <label htmlFor="profileUpload" className="cursor-pointer block h-full w-full">
         <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-blue-500 transition-all duration-300 group-hover:border-blue-500 shadow-lg group-hover:shadow-blue-500/20">
           

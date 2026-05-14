@@ -42,7 +42,6 @@ const About = () => {
 
         {/* Card 1 */}
         <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-8 hover:border-blue-400 transition duration-300">
-          {/* <Target className="text-green-400 mb-4" size={40} /> */}
           <h3 className="text-2xl font-semibold mb-4">
             Consistency {" > "} Talent
           </h3>
@@ -54,7 +53,6 @@ const About = () => {
 
         {/* Card 2 */}
         <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-8 hover:border-blue-400 transition duration-300">
-          {/* <Zap className="text-green-400 mb-4" size={40} /> */}
           <h3 className="text-2xl font-semibold mb-4">
             Learn by Doing
           </h3>
@@ -66,7 +64,6 @@ const About = () => {
 
         {/* Card 3 */}
         <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-8 hover:border-blue-400 transition duration-300">
-          {/* <Code className="text-green-400 mb-4" size={40} /> */}
           <h3 className="text-2xl font-semibold mb-4">
             Think Like a Machine
           </h3>
@@ -78,7 +75,6 @@ const About = () => {
 
         {/* Card 4 */}
         <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-8 hover:border-blue-400 transition duration-300">
-          {/* <Users className="text-green-400 mb-4" size={40} /> */}
           <h3 className="text-2xl font-semibold mb-4">
             Community Driven
           </h3>

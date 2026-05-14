@@ -17,6 +17,9 @@ const Profile = () => {
   });
   const [activityData, setActivityData] = useState([]);
 
+
+  console.log(activityData);
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -25,9 +28,12 @@ const Profile = () => {
 
         const statsRes = await api.get("/auth/user-stats");
         setStats(statsRes.data);
+        console.log(statsRes);
 
         const activityRes = await api.get("/auth/user-activity");
         setActivityData(activityRes.data);
+        console.log(activityRes);
+
       } catch (err) {
         console.error("Profile Fetch Error:", err);
       }
@@ -43,7 +49,7 @@ const Profile = () => {
   <div className="min-h-screen bg-[#020617] text-white p-6 font-sans">
     <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      {/* LEFT SECTION - User Info */}
+      {/* LEFT SECTION*/}
       <div className="bg-[#0f172a] p-6 rounded-2xl glow-card border border-white/5">
         <div className="flex flex-col items-center">
           <div className="relative group">
@@ -81,7 +87,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* MIDDLE SECTION - Real Stats */}
+      {/* MIDDLE SECTION*/}
       <div className="bg-[#0f172a] p-8 rounded-2xl glow-card border border-white/5 flex flex-col items-center justify-center">
         <h3 className="text-gray-400 font-medium mb-6 uppercase tracking-widest text-xs">Solved Problems</h3>
         
@@ -113,11 +119,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* RIGHT SECTION - Badges */}
+      {/* RIGHT SECTION */}
       <div className="bg-[#0f172a] p-6 rounded-2xl glow-card border border-white/5">
         <h3 className="text-gray-400 font-medium mb-6 uppercase tracking-widest text-xs">Achievements</h3>
         <div className="flex flex-wrap gap-4">
-           {/* Placeholder for badges */}
            <div className="w-16 h-16 bg-white/5 rounded-full border border-dashed border-white/20 flex items-center justify-center text-[10px] text-gray-500 text-center p-2">
              Locked
            </div>

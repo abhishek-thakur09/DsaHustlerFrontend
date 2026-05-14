@@ -1,5 +1,5 @@
 import React,{useState,useRef} from "react";
-import { Github, Twitter, MessageSquare, Send } from "lucide-react";
+import {MessageSquare, Send } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
 
@@ -32,7 +32,7 @@ import emailjs from "@emailjs/browser";
     <div className="bg-black text-white min-h-screen py-20 px-6">
       <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
 
-        {/* LEFT SIDE — FIXED FORM TAG */}
+        {/* LEFT SIDE*/}
         <form 
           ref={form} 
           onSubmit={sendEmail} 
@@ -87,7 +87,7 @@ import emailjs from "@emailjs/browser";
                 <Github className="text-gray-400" />
                 <div>
                   <p className="font-semibold">GitHub</p>
-                  <p className="text-gray-400 text-sm">https://github.com/abhishek-thakur09</p>
+                  <link className="text-gray-400 text-sm">https://github.com/abhishek-thakur09</link>
                 </div>
               </div>
 

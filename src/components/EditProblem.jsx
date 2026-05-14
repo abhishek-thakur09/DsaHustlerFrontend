@@ -18,7 +18,7 @@ const ManageProblems = () => {
         const res = await api.get(`/api/problems?page=${page}&limit=20`);
 
         allProblems = [...allProblems, ...res.data.problems];
-        totalPages = res.data.totalPages; // backend must send this
+        totalPages = res.data.totalPages; 
         page++;
       }
       while (page <= totalPages);

@@ -12,13 +12,13 @@ const CodeRunner = () => {
   const [code, setCode] = useState("");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [outputSize, setOutputSize] = useState("hidden"); // Start hidden
+  const [outputSize, setOutputSize] = useState("hidden"); 
 
   const languageMap = {
     cpp: 54,
     javascript: 63,
     python: 71,
-    java: 62
+    java: 62,
   };
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const CodeRunner = () => {
       try {
         const response = await api.get(`/api/singleProblem/${id}`);
         setProblem(response.data);
-        
+
         if (response.data.starterCode && response.data.starterCode[language]) {
           setCode(response.data.starterCode[language]);
         }
@@ -38,23 +38,57 @@ const CodeRunner = () => {
   }, [id, language]);
 
   //Load saved code from LocalStorage
-useEffect(() => {
-  const savedCode = localStorage.getItem(`code-${id}-${language}`);
-  
-  if (savedCode) {
-    setCode(savedCode);
-  } else if (problem?.starterCode && problem.starterCode[language]) {
-    setCode(problem.starterCode[language]);
-  }
-}, [id, language, problem]);
+  useEffect(() => {
+    const savedCode = localStorage.getItem(`code-${id}-${language}`);
 
-useEffect(() => {
-  if (code && id) {
-    localStorage.setItem(`code-${id}-${language}`, code);
-  }
-}, [code, id, language]);
+    if (savedCode) {
+      setCode(savedCode);
+    } else if (problem?.starterCode && problem.starterCode[language]) {
+      setCode(problem.starterCode[language]);
+    }
+  }, [id, language, problem]);
 
-  // Unified execution handler
+  useEffect(() => {
+    if (!code || !id) return;
+
+    // after 1 second of inactivity your code is stored in draft
+    const timeoutId = setTimeout(() => {
+      localStorage.setItem(`code-${id}-${language}`, code);
+      console.log("Draft saved locally");
+    }, 3000);
+
+    //clear the previous timer
+    return () => clearTimeout(timeoutId);
+  }, [code, id, language]);
+
+  useEffect(() => {
+    const fetchProblem = async () => {
+      try {
+        const response = await api.get(`/api/singleProblem/${id}`);
+        const problemData = response.data;
+        setProblem(problemData);
+
+        //Check local draft first
+        const savedDraft = localStorage.getItem(`code-${id}-${language}`);
+
+        if (savedDraft) {
+          setCode(savedDraft);
+        } else if (
+          problemData.starterCode &&
+          problemData.starterCode[language]
+        ) {
+          //Fallback to boilerplate
+          setCode(problemData.starterCode[language]);
+        }
+      } catch (err) {
+        console.error("Error fetching problem:", err);
+      }
+    };
+
+    if (id) fetchProblem();
+  }, [id, language]);
+
+  //execution handler
   const executeCode = async (submitMode = false) => {
     setLoading(true);
     setResults(null);
@@ -75,6 +109,12 @@ useEffect(() => {
 
       const response = await api.post("api/run", payload);
       setResults(response.data);
+
+      //Clear local draft if the solution is accepted
+      if (submitMode && response.data.overallStatus === "Accepted") {
+        localStorage.removeItem(`code-${id}-${language}`);
+        console.log("Solution accepted - Draft cleared");
+      }
     } catch (err) {
       console.error("Execution Error:", err);
       alert("Execution failed. Check console.");
@@ -155,7 +195,9 @@ useEffect(() => {
             <div className="flex items-center gap-4">
               <h3
                 className={`text-2xl font-black uppercase tracking-tighter ${
-                  results.overallStatus === "Accepted" ? "text-green-400" : "text-red-500"
+                  results.overallStatus === "Accepted"
+                    ? "text-green-400"
+                    : "text-red-500"
                 }`}
               >
                 {results.overallStatus}
@@ -170,7 +212,11 @@ useEffect(() => {
 
             <div className="flex gap-4 items-center">
               <button
-                onClick={() => setOutputSize(outputSize === "expanded" ? "normal" : "expanded")}
+                onClick={() =>
+                  setOutputSize(
+                    outputSize === "expanded" ? "normal" : "expanded",
+                  )
+                }
                 className="text-gray-500 hover:text-white text-xs font-bold uppercase tracking-widest"
               >
                 {outputSize === "expanded" ? "▼ Collapse" : "▲ Expand"}
@@ -191,15 +237,27 @@ useEffect(() => {
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex gap-6 mb-8">
                 <div className="bg-[#1e293b]/30 p-5 rounded-2xl border border-gray-800 min-w-[160px]">
-                  <p className="text-gray-500 text-xs font-bold uppercase mb-1">Runtime</p>
+                  <p className="text-gray-500 text-xs font-bold uppercase mb-1">
+                    Runtime
+                  </p>
                   <p className="text-2xl font-bold text-white">
-                    {Math.max(...results.results.map((r) => parseFloat(r.time) || 0)).toFixed(3)} s
+                    {Math.max(
+                      ...results.results.map((r) => parseFloat(r.time) || 0),
+                    ).toFixed(3)}{" "}
+                    s
                   </p>
                 </div>
                 <div className="bg-[#1e293b]/30 p-5 rounded-2xl border border-gray-800 min-w-[160px]">
-                  <p className="text-gray-500 text-xs font-bold uppercase mb-1">Memory</p>
+                  <p className="text-gray-500 text-xs font-bold uppercase mb-1">
+                    Memory
+                  </p>
                   <p className="text-2xl font-bold text-white">
-                    {(Math.max(...results.results.map((r) => parseInt(r.memory) || 0)) / 1024).toFixed(2)} MB
+                    {(
+                      Math.max(
+                        ...results.results.map((r) => parseInt(r.memory) || 0),
+                      ) / 1024
+                    ).toFixed(2)}{" "}
+                    MB
                   </p>
                 </div>
               </div>
@@ -219,29 +277,43 @@ useEffect(() => {
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <span className={`text-[10px] font-black uppercase ${res.passed ? "text-green-400" : "text-red-400"}`}>
+                      <span
+                        className={`text-[10px] font-black uppercase ${res.passed ? "text-green-400" : "text-red-400"}`}
+                      >
                         {res.passed ? "Passed" : "Failed"}
                       </span>
-                      <h4 className="text-white font-bold">Test Case {index + 1}</h4>
+                      <h4 className="text-white font-bold">
+                        Test Case {index + 1}
+                      </h4>
                     </div>
                     <div className="text-right text-[10px] text-gray-500 uppercase font-bold space-y-1">
                       <div>{res.status}</div>
-                      <div>{res.time}s | {res.memory} KB</div>
+                      <div>
+                        {res.time}s | {res.memory} KB
+                      </div>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-[10px] font-bold text-gray-600 uppercase mb-1">Expected Output</p>
+                      <p className="text-[10px] font-bold text-gray-600 uppercase mb-1">
+                        Expected Output
+                      </p>
                       <pre className="bg-[#000] p-3 rounded-lg text-blue-400 text-xs overflow-x-auto border border-gray-900">
                         {res.expected}
                       </pre>
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-gray-600 uppercase mb-1">Your Output</p>
-                      <pre className={`p-3 rounded-lg text-xs overflow-x-auto border ${
-                        res.passed ? "bg-[#000] text-green-400 border-gray-900" : "bg-red-900/10 text-red-400 border-red-900/30"
-                      }`}>
+                      <p className="text-[10px] font-bold text-gray-600 uppercase mb-1">
+                        Your Output
+                      </p>
+                      <pre
+                        className={`p-3 rounded-lg text-xs overflow-x-auto border ${
+                          res.passed
+                            ? "bg-[#000] text-green-400 border-gray-900"
+                            : "bg-red-900/10 text-red-400 border-red-900/30"
+                        }`}
+                      >
                         {res.actual || "No output"}
                       </pre>
                     </div>

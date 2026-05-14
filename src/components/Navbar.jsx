@@ -1,18 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../Slice/AuthSlice";
-import EditProblem from "./EditProblem";
 
 const Logo = () => {
   return (
     <div className="cursor-pointer transition-all duration-600 ease-in-out hover:scale-105 tracking-tight">
-      <span className="text-blue-500 font-medium text-4xl hover:text-blue-400 sm:text-5xl">
-        DSA
-      </span>
-      <span className="text-white font-light text-3xl sm:text-4xl">
-        hustler
-      </span>
+      <span className="text-blue-500 font-medium text-4xl hover:text-blue-400 sm:text-5xl">DSA</span>
+      <span className="text-white font-light text-3xl sm:text-4xl">hustler</span>
     </div>
   );
 };
@@ -22,91 +17,116 @@ const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  
+  const [isOpen, setIsOpen] = useState(false); 
+  const [showDropdown, setShowDropdown] = useState(false); 
+  const dropdownRef = useRef(null); 
 
   const isLoggedIn = !!user;
 
-  const [isOpen, setIsOpen] = useState(false);
-
   useEffect(() => {
     setIsOpen(false);
+    setShowDropdown(false);
   }, [location.pathname]);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem("token"); // optional
-    navigate("/");
-  };
 
-  // if (loading) return null;
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+const handleLogout = async () => {
+  try {
+    
+    await api.post("/auth/logout");
+
+    dispatch(logout()); 
+
+    navigate("/login");
+    
+  } catch (error) {
+    console.error("Logout failed:", error);
+    dispatch(logout());
+    navigate("/login");
+  }
+};
 
   return (
     <nav className="w-full sticky top-0 z-50 bg-gradient-to-r from-gray-900 to-[#0f172a]">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        <div onClick={() => navigate("/")}>
+        <div onClick={() => navigate("/")} className="cursor-pointer">
           <Logo />
         </div>
 
-        {/* DESKTOP MENU */}
-        <div className="hidden lg:flex items-center gap-8 text-gray-400 cursor-pointer">
-          {
-            <>
-              <button
-                onClick={() => navigate("/problems")}
-                className={`hover:text-white ${
-                  location.pathname === "/problems" ? "text-white" : ""
-                }`}
-              >
-                Problems
-              </button>
-              <button
-                onClick={() => navigate("/contact")}
-                className={`hover: border-y-white ${
-                  location.pathname === "/problems" ? "text-white" : ""
-                }`}
-              >
-                Contact
-              </button>
-              <button
-                onClick={() => navigate("/about")}
-                className={`hover:text-white ${
-                  location.pathname === "/problems" ? "text-white" : ""
-                }`}
-              >
-                About
-              </button>
-              {isLoggedIn && (
-                <button
-                  onClick={() => navigate("/profile")}
-                  className={`hover:text-white ${
-                    location.pathname === "/profile" ? "text-white" : ""
-                  }`}
-                >
-                  Profile
-                </button>
-              )}
-            </>
-          }
+        {/* DESKTOP NAV LINKS */}
+        <div className="hidden lg:flex items-center gap-8 text-gray-400">
+          <button onClick={() => navigate("/problems")} className={`hover:text-white ${location.pathname === "/problems" ? "text-white" : ""}`}>
+            Problems
+          </button>
+          <button onClick={() => navigate("/contact")} className="hover:text-white">
+            Contact
+          </button>
+          <button onClick={() => navigate("/about")} className="hover:text-white">
+            About
+          </button>
         </div>
-        {/* RIGHT */}
-        <div className="hidden lg:flex items-center gap-4 cursor-pointer">
+
+        {/* AUTH BUTTONS OR PROFILE */}
+        <div className="hidden lg:flex items-center gap-4">
           {isLoggedIn ? (
-            <>
+            <div className="relative" ref={dropdownRef}>
+              {/* Profile Photo Trigger */}
               <button
-                onClick={handleLogout}
-                className="text-white px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400"
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center focus:outline-none"
               >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => navigate("/login")}
-                className="text-white hover:text-gray-300"
-              >
-                Log In
+                <img
+                  src={user?.profileImage || "https://via.placeholder.com/40"} 
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover hover:border-blue-400 transition"
+                />
               </button>
 
+              {/* Dropdown Menu */}
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl py-2 z-50">
+                  <div className="px-4 py-2 border-b border-gray-700">
+                    <p className="text-sm text-white font-medium truncate">{user?.name || "User"}</p>
+                    <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+                  </div>
+                  <button
+                    onClick={() => navigate("/profile")}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                  >
+                    My Profile
+                  </button>
+                  {/* <button
+                    onClick={() => navigate("/settings")}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                  >
+                    Settings
+                  </button> */}
+                  <hr className="border-gray-700 my-1" />
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700 hover:text-red-300"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <button onClick={() => navigate("/login")} className="text-white hover:text-gray-300">
+                Log In
+              </button>
               <button
                 onClick={() => navigate("/signin")}
                 className="px-4 py-2 rounded-lg bg-blue-400 text-black font-medium hover:bg-blue-300 transition"
@@ -118,77 +138,26 @@ const Navbar = () => {
         </div>
 
         {/* MOBILE TOGGLE */}
-        <button
-          className="lg:hidden text-white text-2xl"
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <button className="lg:hidden text-white text-2xl" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? "✕" : "☰"}
         </button>
       </div>
 
       {/* MOBILE MENU */}
       {isOpen && (
-        <div className="lg:hidden bg-gray-900 px-6 py-4 space-y-4 cursor-pointer">
-          {isLoggedIn && (
+        <div className="lg:hidden bg-gray-900 px-6 py-4 space-y-4 border-t border-gray-800">
+          <button onClick={() => navigate("/problems")} className="block text-gray-300 w-full text-left">Problems</button>
+          <button onClick={() => navigate("/contact")} className="block text-gray-300 w-full text-left">Contact</button>
+          
+          {isLoggedIn ? (
             <>
-              <button
-                onClick={() => {
-                  navigate("/problems");
-                  setIsOpen(false);
-                }}
-                className="block text-gray-300 hover:text-white"
-              >
-                Problems
-              </button>
-              <button
-                onClick={() => navigate("/contact")}
-                className={ `block text-gray-300 hover:text-white hover: border-y-white ${
-                  location.pathname === "/problems" ? "text-white" : ""
-                }`}
-              >
-                Contact
-              </button>
-              <button
-                onClick={() => navigate("/about")}
-                className={`block text-gray-300 hover:text-white ${
-                  location.pathname === "/problems" ? "text-white" : ""
-                }`}
-              >
-                About
-              </button>
-              <button
-                onClick={() => {
-                  navigate("/profile");
-                  setIsOpen(false);
-                }}
-                className="block text-gray-300 hover:text-white"
-              >
-                Profile
-              </button>
-              <button
-                onClick={handleLogout}
-                className="block text-white px-4 py-2 rounded-lg bg-red-600 hover:bg-red-400"
-              >
-                Logout
-              </button>
+              <button onClick={() => navigate("/profile")} className="block text-gray-300 w-20 text-left">Profile</button>
+              <button onClick={handleLogout} className="w-20 text-center py-2 rounded-lg bg-red-600 text-white">Logout</button>
             </>
-          )}
-
-          {!isLoggedIn && (
+          ) : (
             <>
-              <button
-                onClick={() => navigate("/login")}
-                className="block text-white"
-              >
-                Log In
-              </button>
-
-              <button
-                onClick={() => navigate("/signin")}
-                className="block px-4 py-2 rounded-lg bg-blue-400 text-black"
-              >
-                Register
-              </button>
+              <button onClick={() => navigate("/login")} className="block text-white w-20 text-left">Log In</button>
+              <button onClick={() => navigate("/signin")} className="w-20 py-2 rounded-lg bg-blue-400 text-black text-center">Register</button>
             </>
           )}
         </div>

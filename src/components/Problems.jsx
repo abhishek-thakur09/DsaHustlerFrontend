@@ -3,11 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setTotalProblems } from "../Slice/ProblemSlice";
 import { useProblem } from "../hooks/useProblem";
+import { motion} from "framer-motion";
+
+
+
 
 const Problems = () => {
   const [allProblems, setAllProblems] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [filteredProblems, setFilteredProblems] = useState([]);
+
 
   const { problems } = useProblem();
 
@@ -79,6 +84,11 @@ const Problems = () => {
   };
 
   return (
+    <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 4, y: 0 }}
+  transition={{ duration: 0.2 }}
+>
     <div className="bg-black min-h-[calc(100vh-80px)] mx-auto px-6 py-8">
       {/* Heading */}
       <div className="flex justify-between">
@@ -139,6 +149,7 @@ const Problems = () => {
         )}
       </div>
     </div>
+    </motion.div>
   );
 };
 
