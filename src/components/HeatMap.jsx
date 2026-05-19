@@ -10,10 +10,9 @@ const SubmissionHeatmap = ({ data }) => {
   const today = new Date();
   const lastYear = subYears(today, 1);
 
+
   return (
-    <div className="bg-gray-900 p-6 rounded-xl border border-gray-800">
-      <h3 className="text-white mb-4">Submission Activity</h3>
-      
+    <div className="bg-gray-700 p-6 rounded-xl border border-gray-800">      
       <CalendarHeatmap
         startDate={lastYear}
         endDate={today}

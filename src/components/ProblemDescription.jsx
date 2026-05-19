@@ -1,11 +1,8 @@
 import React from "react";
-import {useSingleProblem } from "../hooks/useProblem";
-import { useParams } from "react-router-dom";
 
 
-const ProblemDescription = () => {
-const { id } = useParams();
-  const { problem } = useSingleProblem(id);
+const ProblemDescription = ({problem}) => {
+
 
   if (!problem) {
     return <div className="text-white p-6">Loading...</div>;

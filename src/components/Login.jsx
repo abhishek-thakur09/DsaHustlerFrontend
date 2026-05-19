@@ -3,7 +3,7 @@ import { setUser } from "../Slice/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import api from "../utils/api";
-import { motion } from "framer-motion"; // Make sure to use 'framer-motion'
+import { motion } from "framer-motion"; 
 
 const Login = () => {
   const dispatch = useDispatch();

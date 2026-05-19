@@ -3,15 +3,19 @@ import CodeRunner from "./CodeRunner";
 import ProblemDescription from "./ProblemDescription";
 import AIChat from "./AiChat";
 import Editorial from "./Editorial";
+import { useSingleProblem } from "../hooks/useProblem";
+import { useParams } from "react-router-dom";
 
 const ProblemDetails = () => {
   const [activeTab, setActiveTab] = useState("description");
+  const { id } = useParams();
+  const { problem } = useSingleProblem(id);
 
   return (
     <div>
-      <div className="h-screen bg-black text-amber-50 flex overflow-hidden">
+      <div className="h-[calc(100vh-80px)] bg-black text-amber-50 flex">
         {/* LEFT PANEL */}
-        <div className="w-1/2 h-auto border-r border-slate-800 p-6 mb-10 overflow-y-auto">
+        <div className="w-1/2 border-r border-slate-800 p-6 overflow-y-auto">
           {/* NAVBAR */}
           <div className="flex gap-6 border-b border-slate-700 mb-4">
             <button
@@ -50,8 +54,10 @@ const ProblemDetails = () => {
           </div>
 
           {/* TAB CONTENT */}
-          {activeTab === "description" && <ProblemDescription />}
-          {activeTab === "aiChat" && <AIChat />}
+          {activeTab === "description" && (
+            <ProblemDescription problem={problem} />
+          )}
+          {activeTab === "aiChat" && <AIChat problem={problem} />}
           {activeTab === "editorial" && <Editorial />}
         </div>
 

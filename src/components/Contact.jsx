@@ -1,9 +1,8 @@
-import React,{useState,useRef} from "react";
-import {MessageSquare, Send } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { MessageSquare, Send, Github, Twitter } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
-
-  const ContactSection = () => {
+const ContactSection = () => {
   const form = useRef();
   const [isSending, setIsSending] = useState(false);
 
@@ -11,31 +10,34 @@ import emailjs from "@emailjs/browser";
     e.preventDefault();
     setIsSending(true);
 
-    emailjs.sendForm(
-      'service_2ebxo0g', 
-      'template_c95tbo9', 
-      form.current, 
-      'FS8VzignaA7j6SS8h'
-    )
-      .then((result) => {
+    emailjs
+      .sendForm(
+        "service_2ebxo0g",
+        "template_c95tbo9",
+        form.current,
+        "FS8VzignaA7j6SS8h",
+      )
+      .then(
+        (result) => {
           alert("Message sent successfully!");
           setIsSending(false);
           e.target.reset();
-      }, (error) => {
+        },
+        (error) => {
           console.error("EmailJS Error:", error);
           alert("Failed to send message. Please try again.");
           setIsSending(false);
-      });
+        },
+      );
   };
 
   return (
     <div className="bg-black text-white min-h-screen py-20 px-6">
       <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
-
         {/* LEFT SIDE*/}
-        <form 
-          ref={form} 
-          onSubmit={sendEmail} 
+        <form
+          ref={form}
+          onSubmit={sendEmail}
           className="bg-[#0f172a] border border-gray-800 rounded-xl p-8"
         >
           <p className="text-blue-400 mb-6">Compose Message</p>
@@ -61,7 +63,7 @@ import emailjs from "@emailjs/browser";
               placeholder="What's on your mind?"
               className="w-full bg-[#1e293b] p-4 rounded-lg border border-gray-700 outline-none focus:border-blue-400"
             />
-            <button 
+            <button
               type="submit" // Explicitly set type to submit
               disabled={isSending}
               className="w-full bg-blue-400 text-black font-semibold py-4 rounded-lg hover:bg-blue-500 transition flex items-center justify-center gap-2 disabled:opacity-50"
@@ -72,22 +74,24 @@ import emailjs from "@emailjs/browser";
           </div>
         </form>
 
-
         {/* RIGHT SIDE */}
         <div className="space-y-8">
-
           {/* SOCIALS CARD */}
           <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-8">
-
             <p className="text-blue-400 mb-6">Socials</p>
 
             <div className="space-y-6">
-
               <div className="flex items-center gap-4">
                 <Github className="text-gray-400" />
                 <div>
-                  <p className="font-semibold">GitHub</p>
-                  <link className="text-gray-400 text-sm">https://github.com/abhishek-thakur09</link>
+                  <a
+                    href="https://github.com/abhishek-thakur09"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 text-sm hover:text-blue-400"
+                  >
+                    github.com/abhishek-thakur09
+                  </a>
                 </div>
               </div>
 
@@ -106,24 +110,19 @@ import emailjs from "@emailjs/browser";
                   <p className="text-gray-400 text-sm">DSA Hustler</p>
                 </div>
               </div>
-
             </div>
           </div>
 
           {/* PRO TIP CARD */}
           <div className="bg-[#0f172a] border border-blue-500/40 rounded-xl p-8 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
-
             <p className="text-blue-400 mb-3">💡 Pro tip</p>
 
             <p className="text-gray-400">
-              Join our Discord for the fastest response time —
-              usually under O(log n) minutes.
+              Join our Discord for the fastest response time — usually under
+              O(log n) minutes.
             </p>
-
           </div>
-
         </div>
-
       </div>
     </div>
   );

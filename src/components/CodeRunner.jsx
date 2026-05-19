@@ -12,7 +12,8 @@ const CodeRunner = () => {
   const [code, setCode] = useState("");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [outputSize, setOutputSize] = useState("hidden"); 
+  const [outputSize, setOutputSize] = useState("hidden");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const languageMap = {
     cpp: 54,
@@ -117,7 +118,7 @@ const CodeRunner = () => {
       }
     } catch (err) {
       console.error("Execution Error:", err);
-      alert("Execution failed. Check console.");
+      setErrorMessage(err);
     } finally {
       setLoading(false);
     }
@@ -182,6 +183,7 @@ const CodeRunner = () => {
           }}
         />
       </div>
+
 
       {/* RESULTS SECTION */}
       {results && (
