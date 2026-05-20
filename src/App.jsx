@@ -1,26 +1,28 @@
-import React,{useEffect} from "react";
+import React,{useEffect,lazy, Suspense} from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "./Slice/AuthSlice";
 import api from "./utils/api";
 
-import HomePage from "./components/HomePage";
+import Navbar from "./components/Navbar";
 import Login from "./components/Login";
+import HomePage from "./components/HomePage";
 import Problems from "./components/Problems";
 import Profile from "./components/Profile";
-import Navbar from "./components/Navbar";
-import EditProfile from "./components/EditProfile";
-import Register from "./components/Register";
-import CodeEditor1 from "./components/CodeEditor1";
-import EditProblem from "./components/EditProblem";
-import UpdateProblem from "./components/UpdateProblem";
-import AddProblem from "./components/AddProblem";
-import ManageProblems from "./components/EditProblem";
-import ManageUsers from "./components/ManageUsers";
-import Contact from "./components/Contact";
-import About from "./components/About";
-import AIhint from "./components/AiChat";
-import CodeRunner from "./components/CodeRunner";
+import RoadMap from "./components/RoadMap";
+
+// lazy loads
+const Register = lazy(() => import("./components/Register"));
+const EditProfile = lazy(() => import("./components/EditProfile"));
+const CodeEditor1 = lazy(() => import("./components/CodeEditor1"));
+const CodeRunner = lazy(()=> import("./components/CodeRunner"));
+const EditProblem = lazy(() => import("./components/EditProblem"));
+const UpdateProblem = lazy(() => import("./components/UpdateProblem"));
+const AddProblem = lazy(() => import("./components/AddProblem"));
+const ManageUsers = lazy(() => import("./components/ManageUsers"));
+const Contact = lazy(() => import("./components/Contact"));
+const About = lazy(() => import("./components/About"));
+const AIhint = lazy(() => import("./components/AiChat"));
 
 
 function App() {
@@ -56,6 +58,7 @@ function App() {
       <Route path="/about" element= {<About/>}></Route>
       <Route path="/aihint" element={<AIhint/>}></Route>
       <Route path="/singleProblem/:id" element={<CodeRunner />}/>
+      <Route path="/roadmap" element={<RoadMap/>}/>
     </Routes>
     </>
   );

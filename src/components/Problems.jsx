@@ -17,7 +17,6 @@ const Problems = () => {
   const [solvedProblems, setSolvedProblems] = useState([]);
 
   const { problems } = useProblem();
-  console.log(problems);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,11 +59,7 @@ const Problems = () => {
       try {
         const activityRes = await api.get("/auth/user-activity");
 
-        console.log(activityRes);
-
         const solvedIds = activityRes.data.flatMap((item) => item.problems);
-
-        console.log(solvedIds);
 
         setSolvedProblems(solvedIds);
       } catch (err) {
@@ -162,7 +157,7 @@ const Problems = () => {
         </div>
 
         {/* Problems List */}
-        <div className="space-y-4">
+        <div className="space-y-4 w-1/2">
           {filteredProblems.length > 0 ? (
             filteredProblems.map((p) => {
               const solved = solvedProblems.includes(p.title);
@@ -176,7 +171,7 @@ const Problems = () => {
                 hover:translate-y-1"
                   onClick={() => navigate(`/singleProblem/${p._id}`)}
                 >
-                  {solved && <span className="text-green-400 text-lg">✅</span>}
+                  {solved && <span className="px-3 py-1 rounded-full text-sm font-semibold bg-green-500/20 text-green-400">solved</span>}
                   <div className="text-slate-200 font-medium">{p.title}</div>
 
                   <span

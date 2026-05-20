@@ -185,6 +185,7 @@ const HomePage = () => {
             <ul className="space-y-2 text-sm">
               <li onClick={()=> navigate("/")} className="hover:text-cyan-400 cursor-pointer">Home</li>
               <li onClick={()=> navigate("/problems")} className="hover:text-cyan-400 cursor-pointer">Problems</li>
+              <li onClick={()=> navigate("/roadmap")} className="hover:text-cyan-400 cursor-pointer" >RoadMap</li>
               <li onClick={()=> navigate("/about")}  className="hover:text-cyan-400 cursor-pointer">About</li>
               <li onClick={()=> navigate("/contact")}  className="hover:text-cyan-400 cursor-pointer">Contact</li>
             </ul>

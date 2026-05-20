@@ -79,15 +79,20 @@ const Navbar = () => {
           >
             Problems
           </button>
+          <button onClick={()=> navigate("/roadmap")}
+            className={`hover:text-white ${location.pathname === "/roadmap" ? "text-white" : ""}`}
+            >
+            RoadMap
+          </button>
           <button
             onClick={() => navigate("/contact")}
-            className="hover:text-white"
+             className={`hover:text-white ${location.pathname === "/contact" ? "text-white" : ""}`}
           >
             Contact
           </button>
           <button
             onClick={() => navigate("/about")}
-            className="hover:text-white"
+             className={`hover:text-white ${location.pathname === "/about" ? "text-white" : ""}`}
           >
             About
           </button>
@@ -126,12 +131,6 @@ const Navbar = () => {
                   >
                     My Profile
                   </button>
-                  {/* <button
-                    onClick={() => navigate("/settings")}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >
-                    Settings
-                  </button> */}
                   <hr className="border-gray-700 my-1" />
                   <button
                     onClick={handleLogout}
@@ -183,6 +182,11 @@ const Navbar = () => {
             className="block text-gray-300 w-full text-left"
           >
             Contact
+          </button>
+           <button onClick={()=> navigate("/roadmap")}
+            className="block text-gray-300 w-full text-left"
+            >
+            RoadMap
           </button>
 
           {isLoggedIn ? (

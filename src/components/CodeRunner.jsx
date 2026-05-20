@@ -55,7 +55,6 @@ const CodeRunner = () => {
     // after 1 second of inactivity your code is stored in draft
     const timeoutId = setTimeout(() => {
       localStorage.setItem(`code-${id}-${language}`, code);
-      console.log("Draft saved locally");
     }, 3000);
 
     //clear the previous timer

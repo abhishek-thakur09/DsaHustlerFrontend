@@ -17,8 +17,6 @@ const Profile = () => {
   });
   const [activityData, setActivityData] = useState([]);
 
-  console.log(activityData.problems);
-
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -27,11 +25,9 @@ const Profile = () => {
 
         const statsRes = await api.get("/auth/user-stats");
         setStats(statsRes.data);
-        console.log(statsRes);
 
         const activityRes = await api.get("/auth/user-activity");
         setActivityData(activityRes.data);
-        console.log(activityRes);
       } catch (err) {
         console.error("Profile Fetch Error:", err);
       }
@@ -146,7 +142,7 @@ const Profile = () => {
           <h3 className="text-gray-400 font-medium mb-6 uppercase tracking-widest text-xs">
             Achievements
           </h3>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="w-16 h-16 bg-white/5 rounded-full border border-dashed border-white/20 flex items-center justify-center text-[10px] text-gray-500 text-center p-2">
               Locked
             </div>
@@ -163,9 +159,6 @@ const Profile = () => {
           <SubmissionHeatmap data={activityData} />
         </div>
       </div>
-
-      {/* Solved Problems */}
-
     </div>
       </>
   );
